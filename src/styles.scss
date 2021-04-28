@@ -1,1 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+.tasks-list {
+  min-height: 300px;
+}
+
+.prevent-drop:hover .hidden {
+  display: inline-block;
+}

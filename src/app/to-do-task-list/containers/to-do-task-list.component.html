@@ -1,0 +1,31 @@
+<section>
+  <h3 class="bg-blue-700 text-gray-100 text-center font-bold py-8 text-4xl">
+    To Do Task List
+  </h3>
+
+  <div class="px-32 py-8">
+    <div class="w-full pb-8">
+      <app-edit-task [tasksList]="tasksList" (add)="addTask()"></app-edit-task>
+    </div>
+
+    <app-task-list [tasksList]="tasksList" (edit)="editTask($event)" (delete)="deleteTask($event)"
+                   [waitingList]="waitingList"></app-task-list>
+  </div>
+
+  <div class="absolute inset-0 bg-black bg-opacity-50 hidden justify-center items-center h-screen" id="editTaskModal">
+    <div class="bg-gray-200 rounded-3xl shadow-lg p-4">
+      <div class="font-bold py-2 border-b border-gray-300 flex justify-between">
+        <div>Edit Modal</div>
+        <button type="button" (click)="closeModal()" class="focus:outline-none"> 
+          <i class="material-icons text-gray-500 cursor-pointer hover:text-gray-800" title="Close">close</i>
+        </button>
+      </div>
+      <div class="pt-8">
+        <app-edit-task [task]="task" [tasksList]="tasksList" (edit)="editTaskList(tasksList)"></app-edit-task>
+      </div>
+
+      
+    </div>
+  </div>
+
+</section>

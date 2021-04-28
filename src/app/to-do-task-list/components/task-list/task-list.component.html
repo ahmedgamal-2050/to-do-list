@@ -1,0 +1,42 @@
+<div class="flex justify-around rounded-lg p-4 bg-gray-100">
+  <div class="w-1/3">
+    <div class="text-xl text-red-800">Waiting List</div>
+    <div class="w-full bg-red-200 rounded-lg my-2 p-2 border-b-4 border-red-800 tasks-list"
+         id="waiting-tasks" (drop)="drop($event)" (dragover)="allowDrop($event)">
+      <div *ngFor="let task of tasksList, let i = index" draggable="true" (dragstart)="drag($event)" id="{{i}}"
+           class="bg-white p-2 rounded-lg flex justify-between cursor-move prevent-drop task-state mb-2" (dragover)="preventDrop($event)">
+        <div class="prevent-drop pt-1">{{task}}</div>
+        <div class="">
+          <button class="prevent-drop rounded-full py-1 px-2 bg-gray-100 hover:bg-gray-200 focus:outline-none"
+                  type="button" (click)="editTask(i, task)" title="Edit Task">
+            <i class="prevent-drop material-icons text-base text-gray-500">edit</i>
+          </button>
+          <button class="prevent-drop rounded-full py-1 px-2 bg-gray-100 hover:bg-gray-200 focus:outline-none"
+                  type="button" (click)="deleteTask(i)" title="Delete Task">
+            <i class="prevent-drop material-icons text-base text-gray-500">delete</i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>You have {{waitingList}} waiting task(s)</div>
+  </div>
+
+  <div class="w-1/3 mx-2">
+    <div class="text-xl text-blue-800">Processing List</div>
+    <div class="w-full bg-blue-200 rounded-lg my-2 p-2 border-b-4 border-blue-800 tasks-list"
+         id="process-tasks" (drop)="drop($event)" (dragover)="allowDrop($event)">
+
+    </div>
+    <div>You have {{processingList}} processing task(s)</div>
+  </div>
+
+  <div class="w-1/3">
+    <div class="text-xl text-green-800">Finished List</div>
+    <div class="w-full bg-green-200 rounded-lg my-2 p-2 border-b-4 border-green-800 tasks-list"
+         id="finished-tasks" (drop)="drop($event)" (dragover)="allowDrop($event)">
+
+    </div>
+    <div>You have {{finishedList}} finished task(s)</div>
+  </div>
+
+</div>
