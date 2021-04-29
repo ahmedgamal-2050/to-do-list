@@ -1,7 +1,13 @@
 .tasks-list {
-  min-height: 300px;
+  min-height: 50px;
 }
 
 .prevent-drop:hover .hidden {
   display: inline-block;
+}
+
+@media (min-width: 640px){
+  .tasks-list {
+    min-height: 300px;
+  }
 }
