@@ -13,10 +13,10 @@ export class EditTaskComponent implements OnInit {
   public taskFormRequiredMsg: boolean = false;
   public taskFormMinLengthMsg: boolean = false;
 
-  @Input() public tasksList: string[] = [];
-  @Output() add = new EventEmitter<any>();
+  @Input() public tasksList?: Task[];
   @Input() public task?: Task;
-  @Output() edit = new EventEmitter<string[]>();
+  @Output() add = new EventEmitter<Task[]>();
+  @Output() edit = new EventEmitter<Task[]>();
 
   constructor(private fb: FormBuilder, private ref: ChangeDetectorRef) { }
 
@@ -39,27 +39,38 @@ export class EditTaskComponent implements OnInit {
     })
   }
 
-  addTask() {
+  sendTask() {
+    /* add Task */
+    let tasksListArray: Task[] = [];
     if (this.task === undefined) {
       if (this.taskForm.dirty && this.taskForm.valid) {
-        this.tasksList.push(this.taskForm.value.taskName);
+        let randomNum = Math.random() * 1000;
+        let taskRecord = {
+          taskId: randomNum.toFixed(),
+          taskName: this.taskForm.value.taskName
+        }
+        tasksListArray.push(taskRecord);
         this.taskForm.reset();
-        this.add.emit();
+        this.add.emit(tasksListArray);
+        this.taskFormRequiredMsg = false;
       } else {
         this.taskFormRequiredMsg = true;
       }
     } else {
-      if (this.taskForm.dirty && this.taskForm.valid) {
-        for (let i = 0; i <= this.tasksList.length; i++) {
-          if (this.tasksList[this.task.taskIndex] === this.tasksList[i]) {
-            this.tasksList[i] = this.taskForm.value.taskName;
+      /* edit Task */
+      if (this.tasksList) {
+        if (this.taskForm.dirty && this.taskForm.valid) {
+          for (let i = 0; i < this.tasksList.length; i++) {
+            if (this.task.taskId == this.tasksList[i].taskId) {
+              this.tasksList[i].taskName = this.taskForm.value.taskName;
+            }
           }
+          this.edit.emit(this.tasksList);
+          this.ref.detectChanges();
         }
-        this.edit.emit(this.tasksList);
-        this.ref.detectChanges();
-      }
-      else {
-        this.taskFormRequiredMsg = true;
+        else {
+          this.taskFormRequiredMsg = true;
+        }
       }
     }
   }
@@ -74,7 +85,7 @@ export class EditTaskComponent implements OnInit {
         });
     }
     if (changes.tasksList && changes.tasksList.currentValue) {
-      this.tasksList = changes.tasksList.currentValue as any;
+      this.tasksList = changes.tasksList.currentValue as Task[];
     }
   }
 }

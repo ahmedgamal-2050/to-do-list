@@ -1,4 +1,4 @@
-<form [formGroup]="taskForm" (submit)="addTask()">
+<form [formGroup]="taskForm" (submit)="sendTask()">
   <div class="flex justify-center mb-2">
     <label class="font-bold pt-2">Task Name</label>
     <input formControlName="taskName" placeholder="Enter the task name" type="text"

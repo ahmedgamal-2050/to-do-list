@@ -9,35 +9,28 @@ import { Task } from '../../task';
 export class TaskListComponent implements OnInit {
   public processingList: number = 0;
   public finishedList: number = 0;
-  public task: Task | undefined;
+  public task?: Task;
 
   @Input() public waitingList: number = 0;
-  @Input() public tasksList: string[] = [];
+  @Input() public tasksList?: Task[];
   @Output() edit = new EventEmitter<Task>();
-  @Output() delete = new EventEmitter <number>();
+  @Output() delete = new EventEmitter<Task>();
 
   constructor(private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
 
-  editTask(index: number, taskName: string) {
-    this.task = {
-      taskName: taskName,
-      taskIndex: index
-    };
+  editTask(task: Task) {
+    this.task = task;
     this.edit.emit(this.task);
+    this.refreshAllStateListsCount();
+    this.ref.detectChanges();
   }
 
-  deleteTask(index: number) {
-    this.delete.emit(index);
-    this.ref.detectChanges();
-    let taskListContainers = document.querySelectorAll('.tasks-list');
-    for (let i = 0; i < taskListContainers.length; i++) {
-      this.waitingList = taskListContainers[0].childElementCount;
-      this.processingList = taskListContainers[1].childElementCount;
-      this.finishedList = taskListContainers[2].childElementCount;
-    }
+  deleteTask(task: Task) {
+    this.delete.emit(task);
+    this.refreshAllStateListsCount();
   }
 
   drag(event: any) {
@@ -51,12 +44,8 @@ export class TaskListComponent implements OnInit {
     }
     var data = event.dataTransfer.getData("text");
     event.target.appendChild(document.getElementById(data));
-    let taskListContainers = document.querySelectorAll('.tasks-list');
-    for (let i = 0; i < taskListContainers.length; i++) {
-      this.waitingList = taskListContainers[0].childElementCount;
-      this.processingList = taskListContainers[1].childElementCount;
-      this.finishedList = taskListContainers[2].childElementCount;
-    }
+    this.refreshAllStateListsCount();
+    this.ref.detectChanges();
   }
 
   allowDrop(event: any) {
@@ -72,6 +61,15 @@ export class TaskListComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.waitingList && changes.waitingList.currentValue) {
       this.waitingList = changes.waitingList.currentValue as number;
+    }
+  }
+
+  refreshAllStateListsCount() {
+    let taskListContainers = document.querySelectorAll('.tasks-list');
+    for (let i = 0; i < taskListContainers.length; i++) {
+      this.waitingList = taskListContainers[0].childElementCount;
+      this.processingList = taskListContainers[1].childElementCount;
+      this.finishedList = taskListContainers[2].childElementCount;
     }
   }
 

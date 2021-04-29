@@ -1,4 +1,9 @@
 export interface Task {
-  taskIndex: number;
+  taskId: string;
   taskName: string;
+}
+
+export interface TaskState {
+  listId: string;
+  listName: string;
 }

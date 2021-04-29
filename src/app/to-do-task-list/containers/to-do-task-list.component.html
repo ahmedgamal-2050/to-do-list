@@ -5,7 +5,7 @@
 
   <div class="px-32 py-8">
     <div class="w-full pb-8">
-      <app-edit-task [tasksList]="tasksList" (add)="addTask()"></app-edit-task>
+      <app-edit-task (add)="addTask($event)"></app-edit-task>
     </div>
 
     <app-task-list [tasksList]="tasksList" (edit)="editTask($event)" (delete)="deleteTask($event)"

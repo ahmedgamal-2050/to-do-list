@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Task } from '../task';
 
 @Component({
@@ -9,18 +9,20 @@ import { Task } from '../task';
 
 export class ToDoTaskListComponent implements OnInit {
   public title = 'to-do-list';
-  public tasksList: string[] = [];
+  public tasksList: Task[] = [];
   public waitingList: number = 0;
   public task: Task | undefined;
 
-  constructor() {
+  constructor(private ref: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
 
   }
 
-  addTask() {
+  addTask(taskList: Task[]) {
+    this.tasksList.push(...taskList);
+
     let waitingListContainer = <HTMLDivElement>document.getElementById('waiting-tasks');
     this.waitingList = waitingListContainer.childElementCount + 1;
   }
@@ -32,15 +34,18 @@ export class ToDoTaskListComponent implements OnInit {
     }
   }
 
-  deleteTask(index: number) {
-    this.tasksList.splice(index, 1);
+  deleteTask(task: Task) {
+    for (let i = 0; i < this.tasksList.length; i++) {
+      if (task.taskId == this.tasksList[i].taskId) {
+        this.tasksList.splice(i, 1);
+      }
+    }
+    this.ref.detectChanges();
   }
 
   editTaskList(tasksList: any) {
-    if (tasksList) {
-      this.closeModal();
-      this.tasksList = tasksList;
-    }
+    this.tasksList = tasksList;
+    this.closeModal();
   }
 
   openModal(): void {
